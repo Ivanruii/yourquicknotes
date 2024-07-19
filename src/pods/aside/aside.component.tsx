@@ -4,12 +4,12 @@ export const Aside = () => {
   const { notes, setActiveNoteId } = useNotesContext();
 
   return (
-    <aside className="bg-gray-100 p-4">
+    <aside className="p-4 bg-gray-100">
       {notes.map((note) => (
         <button
           key={note.id}
           onClick={() => setActiveNoteId(note.id)}
-          className="block w-full text-left p-2 mb-2 bg-blue-500 text-white rounded"
+          className="block w-full p-2 mb-2 text-left text-white bg-blue-500 rounded"
         >
           {note.name}
         </button>
