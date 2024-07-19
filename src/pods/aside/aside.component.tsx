@@ -1,19 +1,44 @@
-import { useNotesContext } from "@/core/providers/notes/notes.provider";
+import { ContextMenu } from "@/common/context-menu";
+import { NoteItem } from "./components/note-item.component";
+import { useAside } from "./use-aside.hook";
 
 export const Aside = () => {
-  const { notes, setActiveNoteId } = useNotesContext();
+  const {
+    notes,
+    showContextMenu,
+    contextMenuPosition,
+    handleContextMenu,
+    handleInputChange,
+    handleInputBlur,
+    handleKeyDown,
+    contextMenuActions,
+    setShowContextMenu,
+    setActiveNoteId,
+  } = useAside();
 
   return (
-    <aside className="p-4 bg-gray-100">
+    <aside className="relative p-4 bg-gray-100">
       {notes.map((note) => (
-        <button
+        <NoteItem
           key={note.id}
+          note={note}
+          isEditing={note.id === contextMenuActions.editingNoteId}
+          newNoteName={contextMenuActions.newNoteName}
           onClick={() => setActiveNoteId(note.id)}
-          className="block w-full p-2 mb-2 text-left text-white bg-blue-500 rounded"
-        >
-          {note.name}
-        </button>
+          onContextMenu={(e) => handleContextMenu(e, note.name)}
+          onInputChange={handleInputChange}
+          onInputBlur={handleInputBlur}
+          onKeyDown={handleKeyDown}
+        />
       ))}
+
+      {showContextMenu && contextMenuPosition && (
+        <ContextMenu
+          position={contextMenuPosition}
+          onClose={() => setShowContextMenu(false)}
+          actions={contextMenuActions.actions}
+        />
+      )}
     </aside>
   );
 };
