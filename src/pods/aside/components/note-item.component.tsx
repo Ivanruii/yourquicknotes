@@ -1,5 +1,5 @@
 import React from "react";
-import { NoteModel } from "@/core/providers/notes/notes.model";
+import { NoteModel } from "@/core/providers/";
 
 interface NoteItemProps {
   note: NoteModel;

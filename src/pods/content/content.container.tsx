@@ -1,5 +1,5 @@
 import { useActiveNote } from "./use-active-note.hook";
-import { NoteEditor } from "./components/note-editor.component";
+import { NoteEditor } from "./components";
 
 export const Content = () => {
   const { activeNote, editorRef, handleEditorChange } = useActiveNote();

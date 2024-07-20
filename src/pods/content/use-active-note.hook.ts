@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { useNotesContext } from "@/core/providers/notes/notes.provider";
-import { NoteModel } from "@/core/providers/notes/notes.model";
 import { MDXEditorMethods } from "@mdxeditor/editor";
+import { NoteModel, useNotesContext } from "@/core/providers/";
 
 export const useActiveNote = () => {
   const { notes, activeNoteId, setNoteContent } = useNotesContext();

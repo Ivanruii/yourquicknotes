@@ -21,7 +21,7 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { ForwardedRef, forwardRef } from "react";
-import { ImageDialog } from "./add-image-dialog.component";
+import { ImageDialog } from "./";
 
 interface NoteEditorProps {
   markdown: string;

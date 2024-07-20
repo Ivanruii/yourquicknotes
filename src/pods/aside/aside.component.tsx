@@ -1,7 +1,7 @@
 import React from "react";
 import useAside from "./use-aside.hook";
 import { ContextMenu } from "@/common/components/";
-import { NoteItem } from "./components/note-item.component";
+import { NoteItem } from "./components/";
 
 export const Aside: React.FC = () => {
   const {
