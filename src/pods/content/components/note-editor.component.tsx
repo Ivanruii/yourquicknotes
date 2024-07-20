@@ -16,9 +16,12 @@ import {
   diffSourcePlugin,
   thematicBreakPlugin,
   MDXEditorMethods,
+  imagePlugin,
+  InsertImage,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { ForwardedRef, forwardRef } from "react";
+import { ImageDialog } from "./add-image-dialog.component";
 
 interface NoteEditorProps {
   markdown: string;
@@ -52,6 +55,17 @@ export const NoteEditor = forwardRef<MDXEditorMethods, NoteEditorProps>(
             viewMode: "rich-text",
           }),
           thematicBreakPlugin(),
+          imagePlugin({
+            imageUploadHandler: (image: File) => {
+              if (image) {
+                return Promise.resolve(URL.createObjectURL(image));
+              }
+              // TODO: Add error image.
+
+              return Promise.resolve("https://picsum.photos/200/300");
+            },
+            ImageDialog: ImageDialog,
+          }),
           toolbarPlugin({
             toolbarContents: () => (
               <>
@@ -59,6 +73,7 @@ export const NoteEditor = forwardRef<MDXEditorMethods, NoteEditorProps>(
                 <BoldItalicUnderlineToggles />
                 <InsertTable />
                 <InsertCodeBlock />
+                <InsertImage />
               </>
             ),
           }),

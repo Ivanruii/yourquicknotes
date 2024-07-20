@@ -12,7 +12,7 @@ interface ContextMenuProps {
   contextMenuRef: RefObject<HTMLDivElement>;
 }
 
-const ContextMenu: React.FC<ContextMenuProps> = ({
+export const ContextMenu: React.FC<ContextMenuProps> = ({
   show,
   position,
   options,
@@ -41,5 +41,3 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
     </div>
   );
 };
-
-export default ContextMenu;
