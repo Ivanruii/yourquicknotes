@@ -10,6 +10,13 @@ import {
   UndoRedo,
   toolbarPlugin,
   MDXEditorMethods,
+  InsertTable,
+  tablePlugin,
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  InsertCodeBlock,
+  diffSourcePlugin,
+  linkPlugin,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { useNotesContext } from "@/core/providers/notes/notes.provider";
@@ -51,14 +58,31 @@ export const Content = () => {
           plugins={[
             headingsPlugin(),
             listsPlugin(),
+            linkPlugin(),
             quotePlugin(),
-            thematicBreakPlugin(),
             markdownShortcutPlugin(),
+            tablePlugin(),
+            codeBlockPlugin({ defaultCodeBlockLanguage: "js" }),
+            codeMirrorPlugin({
+              codeBlockLanguages: {
+                js: "JavaScript",
+                css: "CSS",
+                ts: "TypeScript",
+              },
+            }),
+            diffSourcePlugin({
+              viewMode: "rich-text",
+            }),
+
+            thematicBreakPlugin(),
             toolbarPlugin({
               toolbarContents: () => (
                 <>
                   <UndoRedo />
                   <BoldItalicUnderlineToggles />
+                  <InsertTable />
+
+                  <InsertCodeBlock />
                 </>
               ),
             }),
