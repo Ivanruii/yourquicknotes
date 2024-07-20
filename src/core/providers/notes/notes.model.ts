@@ -16,7 +16,7 @@ export interface NotesContextModel {
   setNoteContent: (id: string, content: string) => void;
   addNote: () => void;
   deleteNote: (id: string) => void;
-  activeNoteId: string;
+  activeNoteId: string | null;
   setActiveNoteId: (id: string) => void;
   saveNotes: () => void;
   loadNotes: () => void;

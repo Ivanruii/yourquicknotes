@@ -9,7 +9,7 @@ interface Props {
 export const NotesProvider = (props: Props) => {
   const { children } = props;
   const [notes, setNotes] = useState<NoteModel[]>([createInitialNote()]);
-  const [activeNoteId, setActiveNoteId] = useState<string>(notes[0].id);
+  const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
 
   const setNoteName = (id: string, name: string) => {
     setNotes((prevNotes) =>
