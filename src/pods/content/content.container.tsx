@@ -1,92 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  headingsPlugin,
-  listsPlugin,
-  quotePlugin,
-  thematicBreakPlugin,
-  markdownShortcutPlugin,
-  MDXEditor,
-  BoldItalicUnderlineToggles,
-  UndoRedo,
-  toolbarPlugin,
-  MDXEditorMethods,
-  InsertTable,
-  tablePlugin,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  InsertCodeBlock,
-  diffSourcePlugin,
-  linkPlugin,
-} from "@mdxeditor/editor";
-import "@mdxeditor/editor/style.css";
-import { useNotesContext } from "@/core/providers/notes/notes.provider";
-import { NoteModel } from "@/core/providers/notes/notes.model";
+import { useActiveNote } from "./use-active-note.hook";
+import { NoteEditor } from "./components/note-editor.component";
 
 export const Content = () => {
-  const { notes, activeNoteId, setNoteContent } = useNotesContext();
-  const [activeNote, setActiveNote] = useState<NoteModel | null>(null);
-  const editorRef = useRef<MDXEditorMethods | null>(null);
-
-  useEffect(() => {
-    const note = notes.find((note) => note.id === activeNoteId);
-    if (note) {
-      setActiveNote(note);
-      if (editorRef.current) {
-        editorRef.current.setMarkdown(note.content);
-      }
-    } else {
-      setActiveNote(null);
-      if (editorRef.current) {
-        editorRef.current.setMarkdown("");
-      }
-    }
-  }, [activeNoteId, notes]);
-
-  const handleEditorChange = (newContent: string) => {
-    if (activeNoteId) {
-      setNoteContent(activeNoteId, newContent);
-    }
-  };
+  const { activeNote, editorRef, handleEditorChange } = useActiveNote();
 
   return (
-    <div className="w-3/4 p-4">
+    <div className="text-white">
       {activeNote ? (
-        <MDXEditor
+        <NoteEditor
           ref={editorRef}
           markdown={activeNote.content}
           onChange={handleEditorChange}
-          plugins={[
-            headingsPlugin(),
-            listsPlugin(),
-            linkPlugin(),
-            quotePlugin(),
-            markdownShortcutPlugin(),
-            tablePlugin(),
-            codeBlockPlugin({ defaultCodeBlockLanguage: "js" }),
-            codeMirrorPlugin({
-              codeBlockLanguages: {
-                js: "JavaScript",
-                css: "CSS",
-                ts: "TypeScript",
-              },
-            }),
-            diffSourcePlugin({
-              viewMode: "rich-text",
-            }),
-
-            thematicBreakPlugin(),
-            toolbarPlugin({
-              toolbarContents: () => (
-                <>
-                  <UndoRedo />
-                  <BoldItalicUnderlineToggles />
-                  <InsertTable />
-
-                  <InsertCodeBlock />
-                </>
-              ),
-            }),
-          ]}
         />
       ) : (
         <p>No note selected</p>

@@ -12,7 +12,7 @@ interface NoteItemProps {
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const NoteItem: React.FC<NoteItemProps> = ({
+export const NoteItem: React.FC<NoteItemProps> = ({
   note,
   editingNoteId,
   newNoteName,
@@ -42,5 +42,3 @@ const NoteItem: React.FC<NoteItemProps> = ({
     </span>
   );
 };
-
-export default NoteItem;
