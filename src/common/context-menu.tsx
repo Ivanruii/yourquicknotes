@@ -1,58 +1,45 @@
-import React, { useRef, useEffect, MouseEvent } from "react";
+import React, { RefObject } from "react";
 
-interface ContextMenuProps {
-  position: { x: number; y: number };
-  onClose: () => void;
-  actions: { label: string; onClick: () => void }[];
+interface ContextMenuOption {
+  label: string;
+  action: () => void;
 }
 
-export const ContextMenu: React.FC<ContextMenuProps> = ({
+interface ContextMenuProps {
+  show: boolean;
+  position: { x: number; y: number } | null;
+  options: ContextMenuOption[];
+  contextMenuRef: RefObject<HTMLDivElement>;
+}
+
+const ContextMenu: React.FC<ContextMenuProps> = ({
+  show,
   position,
-  onClose,
-  actions,
+  options,
+  contextMenuRef,
 }) => {
-  const contextMenuRef = useRef<HTMLDivElement>(null);
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      contextMenuRef.current &&
-      !contextMenuRef.current.contains(e.target as Node)
-    ) {
-      onClose();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener(
-      "mousedown",
-      handleClickOutside as unknown as EventListener
-    );
-    return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside as unknown as EventListener
-      );
-    };
-  }, []);
+  if (!show || !position) return null;
 
   return (
     <div
       ref={contextMenuRef}
       className="fixed bg-white border border-gray-300 rounded shadow-lg"
-      style={{ top: position.y, left: position.x }}
+      style={{
+        top: position.y,
+        left: position.x,
+      }}
     >
-      {actions.map((action, index) => (
+      {options.map((option, index) => (
         <button
           key={index}
-          onClick={() => {
-            action.onClick();
-            onClose();
-          }}
+          onClick={option.action}
           className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
         >
-          {action.label}
+          {option.label}
         </button>
       ))}
     </div>
   );
 };
+
+export default ContextMenu;

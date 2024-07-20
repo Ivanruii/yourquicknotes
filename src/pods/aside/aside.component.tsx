@@ -1,44 +1,47 @@
-import { ContextMenu } from "@/common/context-menu";
-import { NoteItem } from "./components/note-item.component";
-import { useAside } from "./use-aside.hook";
+import React from "react";
+import useAside from "./use-aside.hook";
+import ContextMenu from "@/common/context-menu";
+import NoteItem from "./components/note-item.component";
 
-export const Aside = () => {
+export const Aside: React.FC = () => {
   const {
     notes,
+    editingNoteId,
+    newNoteName,
     showContextMenu,
     contextMenuPosition,
+    selectedNoteId,
     handleContextMenu,
     handleInputChange,
     handleInputBlur,
     handleKeyDown,
-    contextMenuActions,
-    setShowContextMenu,
     setActiveNoteId,
+    getContextMenuOptions,
+    contextMenuRef,
   } = useAside();
 
   return (
-    <aside className="relative p-4 bg-gray-100">
+    <aside className="relative p-4">
       {notes.map((note) => (
         <NoteItem
           key={note.id}
           note={note}
-          isEditing={note.id === contextMenuActions.editingNoteId}
-          newNoteName={contextMenuActions.newNoteName}
+          editingNoteId={editingNoteId}
+          newNoteName={newNoteName}
           onClick={() => setActiveNoteId(note.id)}
-          onContextMenu={(e) => handleContextMenu(e, note.name)}
+          onContextMenu={(e) => handleContextMenu(e, note)}
           onInputChange={handleInputChange}
           onInputBlur={handleInputBlur}
           onKeyDown={handleKeyDown}
         />
       ))}
 
-      {showContextMenu && contextMenuPosition && (
-        <ContextMenu
-          position={contextMenuPosition}
-          onClose={() => setShowContextMenu(false)}
-          actions={contextMenuActions.actions}
-        />
-      )}
+      <ContextMenu
+        show={showContextMenu}
+        position={contextMenuPosition}
+        options={selectedNoteId ? getContextMenuOptions(selectedNoteId) : []}
+        contextMenuRef={contextMenuRef}
+      />
     </aside>
   );
 };

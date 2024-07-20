@@ -1,46 +1,46 @@
-import { ChangeEvent, KeyboardEvent } from "react";
+import React from "react";
+import { NoteModel } from "@/core/providers/notes/notes.model";
 
 interface NoteItemProps {
-  note: { id: string; name: string };
-  isEditing: boolean;
+  note: NoteModel;
+  editingNoteId: string | null;
   newNoteName: string;
   onClick: () => void;
   onContextMenu: (e: React.MouseEvent) => void;
-  onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onInputBlur: () => void;
-  onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export const NoteItem = ({
+const NoteItem: React.FC<NoteItemProps> = ({
   note,
-  isEditing,
+  editingNoteId,
   newNoteName,
   onClick,
   onContextMenu,
   onInputChange,
   onInputBlur,
   onKeyDown,
-}: NoteItemProps) => {
-  return (
-    <div onContextMenu={onContextMenu}>
-      {isEditing ? (
-        <input
-          type="text"
-          value={newNoteName}
-          onChange={onInputChange}
-          onBlur={onInputBlur}
-          onKeyDown={onKeyDown}
-          className="block w-full p-2 mb-2 text-left text-white bg-blue-500 border-none rounded"
-          autoFocus
-        />
-      ) : (
-        <span
-          onClick={onClick}
-          className="block w-full p-2 mb-2 text-left text-white bg-blue-500 rounded cursor-pointer"
-        >
-          {note.name}
-        </span>
-      )}
-    </div>
+}) => {
+  return editingNoteId === note.id ? (
+    <input
+      type="text"
+      value={newNoteName}
+      onChange={onInputChange}
+      onBlur={onInputBlur}
+      onKeyDown={onKeyDown}
+      className="block w-full p-2 mb-2 text-left text-white bg-blue-500 border-none rounded"
+      autoFocus
+    />
+  ) : (
+    <span
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+      className="block w-full p-2 mb-2 text-left text-white bg-blue-500 rounded cursor-pointer"
+    >
+      {note.name}
+    </span>
   );
 };
+
+export default NoteItem;
