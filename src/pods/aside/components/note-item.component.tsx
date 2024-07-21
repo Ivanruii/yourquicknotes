@@ -36,7 +36,7 @@ export const NoteItem: React.FC<NoteItemProps> = ({
     <span
       onClick={onClick}
       onContextMenu={onContextMenu}
-      className="block w-full p-2 mb-2 text-left text-white bg-blue-500 rounded cursor-pointer"
+      className="cursor-pointer"
     >
       {note.name}
     </span>

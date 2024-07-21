@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import {
   closeImageDialog$,
   imageDialogState$,
@@ -7,7 +7,24 @@ import {
   saveImage$,
 } from "@mdxeditor/editor";
 import { useCellValues, usePublisher } from "@mdxeditor/gurx";
-import { Modal } from "@/common/components/";
+import {
+  Dialog,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/common/components/ui/dialog";
+import {
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/common/components/ui/form";
+import { Button } from "@/common/components/ui/button";
+import { Input } from "@/common/components/ui/input";
 
 interface ImageFormFields {
   src: string;
@@ -30,7 +47,7 @@ export const ImageDialog: React.FC = () => {
   const saveImage = usePublisher(saveImage$);
   const closeImageDialog = usePublisher(closeImageDialog$);
 
-  const { register, handleSubmit, reset } = useForm<ImageFormFields>({
+  const methods = useForm<ImageFormFields>({
     defaultValues:
       state.type === "editing"
         ? state.initialValues
@@ -42,86 +59,88 @@ export const ImageDialog: React.FC = () => {
           },
   });
 
+  const { register, handleSubmit, reset } = methods;
+
   return (
-    <Modal
-      isOpen={state.type !== "inactive"}
-      onClose={() => {
-        closeImageDialog();
-        reset({ src: "", title: "", altText: "", file: {} as FileList });
-      }}
-      title={"Image Upload Dialog"}
-      description={
-        "Use this form to upload an image from your device or provide an image URL."
-      }
-    >
-      <form
-        onSubmit={(e) => {
-          void handleSubmit(saveImage)(e);
+    <Dialog
+      open={state.type !== "inactive"}
+      onOpenChange={(open) => {
+        if (!open) {
+          closeImageDialog();
           reset({ src: "", title: "", altText: "", file: {} as FileList });
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-      >
-        <div className="mb-4">
-          <label htmlFor="src" className="block mb-2 text-gray-700">
-            {"Add an image from an URL:"}
-          </label>
-          <input
-            type="text"
-            id="src"
-            {...register("src")}
-            className="block w-full text-sm text-gray-900 border-gray-300 rounded-md"
-            placeholder={"Select or paste an image src"}
-          />
-        </div>
+        }
+      }}
+    >
+      <DialogOverlay />
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Image Upload Dialog</DialogTitle>
+          <DialogDescription>
+            Use this form to provide an image URL.
+          </DialogDescription>
+        </DialogHeader>
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(saveImage)}>
+            <FormItem className="mb-4">
+              <FormLabel htmlFor="src">Add an image from an URL:</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  id="src"
+                  {...register("src")}
+                  placeholder="Select or paste an image src"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
 
-        <div className="mb-4">
-          <label htmlFor="alt" className="block mb-2 text-gray-700">
-            {"Alt:"}
-          </label>
-          <input
-            type="text"
-            id="alt"
-            {...register("altText")}
-            className="block w-full text-sm text-gray-900 border-gray-300 rounded-md"
-          />
-        </div>
+            <FormItem className="mb-4">
+              <FormLabel htmlFor="alt">Alt:</FormLabel>
+              <FormControl>
+                <Input type="text" id="alt" {...register("altText")} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
 
-        <div className="mb-4">
-          <label htmlFor="title" className="block mb-2 text-gray-700">
-            {"Title:"}
-          </label>
-          <input
-            type="text"
-            id="title"
-            {...register("title")}
-            className="block w-full text-sm text-gray-900 border-gray-300 rounded-md"
-          />
-        </div>
+            <FormItem className="mb-4">
+              <FormLabel htmlFor="title">Title:</FormLabel>
+              <FormControl>
+                <Input type="text" id="title" {...register("title")} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
 
-        <div className="flex justify-end gap-2">
-          <button
-            type="submit"
-            className="px-4 py-2 text-white bg-blue-500 rounded-md"
-            title={"Save"}
-            aria-label={"Save"}
-          >
-            {"Save"}
-          </button>
-          <button
-            type="button"
-            className="px-4 py-2 text-gray-700 bg-gray-300 rounded-md"
-            title={"Cancel"}
-            aria-label={"Cancel"}
-            onClick={() => {
-              closeImageDialog();
-              reset({ src: "", title: "", altText: "", file: {} as FileList });
-            }}
-          >
-            {"Cancel"}
-          </button>
-        </div>
-      </form>
-    </Modal>
+            <DialogFooter>
+              <Button
+                type="submit"
+                variant={"outline"}
+                title="Save"
+                aria-label="Save"
+              >
+                Save
+              </Button>
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  title="Cancel"
+                  aria-label="Cancel"
+                  onClick={() => {
+                    closeImageDialog();
+                    reset({
+                      src: "",
+                      title: "",
+                      altText: "",
+                      file: {} as FileList,
+                    });
+                  }}
+                >
+                  Cancel
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </form>
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
   );
 };
