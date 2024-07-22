@@ -24,8 +24,7 @@ const useAside = () => {
   const activeWorkspace = workspaces.find(
     (workspace) => workspace.id === activeWorkspaceId
   );
-  const firstFolder = activeWorkspace?.folders[0];
-  const notes = firstFolder ? firstFolder.notes : [];
+  const folders = activeWorkspace ? activeWorkspace.folders : [];
 
   const displayedNote = activeNotes.find((note) => note.display === true)?.note;
 
@@ -45,13 +44,18 @@ const useAside = () => {
   };
 
   const handleInputBlur = () => {
-    if (displayedNote && activeWorkspaceId && firstFolder) {
-      setNoteName(
-        activeWorkspaceId,
-        firstFolder.id,
-        displayedNote.id,
-        newNoteName
+    if (displayedNote && activeWorkspaceId && activeWorkspace) {
+      const folder = activeWorkspace.folders.find((folder) =>
+        folder.notes.some((note) => note.id === displayedNote.id)
       );
+      if (folder) {
+        setNoteName(
+          activeWorkspaceId,
+          folder.id,
+          displayedNote.id,
+          newNoteName
+        );
+      }
     }
     setEditingNoteId(null);
     setNewNoteName("");
@@ -68,7 +72,9 @@ const useAside = () => {
       label: "Edit",
       action: () => {
         setEditingNoteId(noteId);
-        const note = notes.find((note) => note.id === noteId);
+        const note = activeNotes.find(
+          (activeNote) => activeNote.note.id === noteId
+        )?.note;
         setNewNoteName(note ? note.name : "");
         setShowContextMenu(false);
       },
@@ -76,8 +82,13 @@ const useAside = () => {
     {
       label: "Delete",
       action: () => {
-        if (activeWorkspaceId && firstFolder) {
-          deleteNote(activeWorkspaceId, firstFolder.id, noteId);
+        if (activeWorkspaceId && activeWorkspace) {
+          const folder = activeWorkspace.folders.find((folder) =>
+            folder.notes.some((note) => note.id === noteId)
+          );
+          if (folder) {
+            deleteNote(activeWorkspaceId, folder.id, noteId);
+          }
         }
         setShowContextMenu(false);
       },
@@ -101,7 +112,7 @@ const useAside = () => {
   }, [contextMenuRef]);
 
   return {
-    notes,
+    folders,
     editingNoteId,
     newNoteName,
     showContextMenu,
@@ -114,6 +125,7 @@ const useAside = () => {
     setActiveNoteId,
     getContextMenuOptions,
     contextMenuRef,
+    activeWorkspaceId,
   };
 };
 
