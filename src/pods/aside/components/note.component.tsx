@@ -31,8 +31,7 @@ export const NoteItem: React.FC<NoteItemProps> = ({
 
   useEffect(() => {
     const el = ref.current;
-    // Add this to avoid typescript in strict mode complaining about null
-    // on draggable({ element: el }); call
+
     invariant(el);
 
     return draggable({

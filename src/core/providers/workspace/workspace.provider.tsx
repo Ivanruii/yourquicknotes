@@ -203,24 +203,30 @@ export const WorkspaceProvider = (props: Props) => {
 
   const setActiveNoteDisplay = (noteId: string, display: boolean) => {
     setActiveNotes((prevActiveNotes) => {
-      const existingNoteIndex = prevActiveNotes.findIndex(
-        (activeNote) => activeNote.note.id === noteId
-      );
+      const updatedNotes = prevActiveNotes.map((activeNote) => ({
+        ...activeNote,
+        display: false,
+      }));
 
-      if (existingNoteIndex >= 0) {
-        const updatedNotes = [...prevActiveNotes];
-        updatedNotes[existingNoteIndex] = {
-          ...updatedNotes[existingNoteIndex],
-          display,
-        };
-        return updatedNotes;
-      } else {
-        const newNote = {
-          note: { id: noteId, name: "", content: "" },
-          display,
-        };
-        return [...prevActiveNotes, newNote];
+      if (display) {
+        const existingNoteIndex = prevActiveNotes.findIndex(
+          (activeNote) => activeNote.note.id === noteId
+        );
+
+        if (existingNoteIndex >= 0) {
+          updatedNotes[existingNoteIndex] = {
+            ...updatedNotes[existingNoteIndex],
+            display: true,
+          };
+        } else {
+          updatedNotes.push({
+            note: { id: noteId, name: "", content: "" },
+            display: true,
+          });
+        }
       }
+
+      return updatedNotes;
     });
   };
 

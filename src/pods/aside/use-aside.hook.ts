@@ -30,6 +30,7 @@ const useAside = () => {
   const displayedNote = activeNotes.find((note) => note.display === true)?.note;
 
   const setActiveNoteId = (noteId: string) => {
+    console.log(activeNotes);
     setActiveNoteDisplay(noteId, true);
   };
 
