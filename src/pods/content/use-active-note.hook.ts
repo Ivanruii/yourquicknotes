@@ -1,32 +1,70 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { MDXEditorMethods } from "@mdxeditor/editor";
-import { NoteModel, useNotesContext } from "@/core/providers/";
+import { useWorkspaceContext } from "@/core/providers/";
 
 export const useActiveNote = () => {
-  const { notes, activeNoteId, setNoteContent } = useNotesContext();
-  const [activeNote, setActiveNote] = useState<NoteModel | null>(null);
+  const {
+    workspaces,
+    activeWorkspaceId,
+    setNoteContent,
+    activeNotes,
+    setActiveNoteDisplay,
+  } = useWorkspaceContext();
   const editorRef = useRef<MDXEditorMethods | null>(null);
 
+  const findActiveNote = () => {
+    if (activeWorkspaceId) {
+      const activeWorkspace = workspaces.find(
+        (workspace) => workspace.id === activeWorkspaceId
+      );
+
+      if (activeWorkspace) {
+        for (const folder of activeWorkspace.folders) {
+          for (const activeNote of activeNotes) {
+            if (activeNote.display) {
+              const note = folder.notes.find(
+                (note) => note.id === activeNote.note.id
+              );
+              if (note) {
+                return { folderId: folder.id, note };
+              }
+            }
+          }
+        }
+      }
+    }
+    return null;
+  };
+
   useEffect(() => {
-    const note = notes.find((note) => note.id === activeNoteId);
-    if (note) {
-      setActiveNote(note);
+    const activeNoteObj = findActiveNote();
+    if (activeNoteObj) {
+      const { note } = activeNoteObj;
+      setActiveNoteDisplay(note.id, true);
       if (editorRef.current) {
         editorRef.current.setMarkdown(note.content);
       }
     } else {
-      setActiveNote(null);
       if (editorRef.current) {
         editorRef.current.setMarkdown("");
       }
     }
-  }, [activeNoteId, notes]);
+  }, [activeWorkspaceId, activeNotes, workspaces]);
 
   const handleEditorChange = (newContent: string) => {
-    if (activeNoteId) {
-      setNoteContent(activeNoteId, newContent);
+    console.log("handleEditorChange");
+    const activeNoteObj = findActiveNote();
+    if (activeNoteObj) {
+      const { folderId, note } = activeNoteObj;
+      console.log("activeNoteObj found");
+
+      setNoteContent(activeWorkspaceId!, folderId, note.id, newContent);
     }
   };
 
-  return { activeNote, editorRef, handleEditorChange };
+  const setActiveNoteId = (noteId: string, display: boolean) => {
+    setActiveNoteDisplay(noteId, display);
+  };
+
+  return { activeNotes, editorRef, handleEditorChange, setActiveNoteId };
 };

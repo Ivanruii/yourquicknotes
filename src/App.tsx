@@ -1,10 +1,10 @@
 import { MainScene } from "@/scenes/main.scene";
-import { NotesProvider } from "./core/providers/notes/notes.provider";
+import { WorkspaceProvider } from "./core/providers/workspace/workspace.provider";
 
 export default function App() {
   return (
-    <NotesProvider>
+    <WorkspaceProvider>
       <MainScene />
-    </NotesProvider>
+    </WorkspaceProvider>
   );
 }

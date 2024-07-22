@@ -10,7 +10,7 @@ export const Aside: React.FC = () => {
     newNoteName,
     showContextMenu,
     contextMenuPosition,
-    selectedNoteId,
+    displayedNote,
     handleContextMenu,
     handleInputChange,
     handleInputBlur,
@@ -21,7 +21,7 @@ export const Aside: React.FC = () => {
   } = useAside();
 
   return (
-    <aside className="relative p-4">
+    <aside className="relative flex flex-col p-4">
       {notes.map((note) => (
         <NoteItem
           key={note.id}
@@ -39,7 +39,7 @@ export const Aside: React.FC = () => {
       <ContextMenu
         show={showContextMenu}
         position={contextMenuPosition}
-        options={selectedNoteId ? getContextMenuOptions(selectedNoteId) : []}
+        options={displayedNote ? getContextMenuOptions(displayedNote.id) : []}
         contextMenuRef={contextMenuRef}
       />
     </aside>
