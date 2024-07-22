@@ -224,6 +224,59 @@ export const WorkspaceProvider = (props: Props) => {
     });
   };
 
+  const moveNote = (
+    noteId: string,
+    startFolderId: string,
+    finishFolderId: string
+  ) => {
+    if (startFolderId === finishFolderId) {
+      return;
+    }
+    setWorkspaces((prevWorkspaces) => {
+      const updatedWorkspaces = prevWorkspaces.map((workspace) => {
+        const sourceFolderIndex = workspace.folders.findIndex(
+          (folder) => folder.id === startFolderId
+        );
+        const destinationFolderIndex = workspace.folders.findIndex(
+          (folder) => folder.id === finishFolderId
+        );
+
+        if (sourceFolderIndex === -1 || destinationFolderIndex === -1) {
+          return workspace;
+        }
+
+        const sourceFolder = workspace.folders[sourceFolderIndex];
+        const destinationFolder = workspace.folders[destinationFolderIndex];
+
+        const note = sourceFolder.notes.find((note) => note.id === noteId);
+        if (!note) return workspace;
+
+        const updatedSourceFolder = {
+          ...sourceFolder,
+          notes: sourceFolder.notes.filter((note) => note.id !== noteId),
+        };
+
+        const updatedDestinationFolder = {
+          ...destinationFolder,
+          notes: [...destinationFolder.notes, note],
+        };
+
+        return {
+          ...workspace,
+          folders: workspace.folders.map((folder, index) =>
+            index === sourceFolderIndex
+              ? updatedSourceFolder
+              : index === destinationFolderIndex
+              ? updatedDestinationFolder
+              : folder
+          ),
+        };
+      });
+
+      return updatedWorkspaces;
+    });
+  };
+
   const saveWorkspaces = () => {
     localStorage.setItem("workspaces", JSON.stringify(workspaces));
     localStorage.setItem("activeNotes", JSON.stringify(activeNotes));
@@ -264,6 +317,7 @@ export const WorkspaceProvider = (props: Props) => {
         setNoteContent,
         activeNotes,
         setActiveNoteDisplay,
+        moveNote,
       }}
     >
       {children}

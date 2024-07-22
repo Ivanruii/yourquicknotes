@@ -58,6 +58,11 @@ export interface WorkspaceContextModel {
     noteId: string,
     content: string
   ) => void;
+  moveNote: (
+    noteId: string,
+    startFolderId: string,
+    finishFolderId: string
+  ) => void;
   activeNotes: { note: NoteModel; display: boolean }[];
   setActiveNoteDisplay: (noteId: string, display: boolean) => void;
 }

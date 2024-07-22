@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NoteItem } from "./note.component";
 import { NoteModel } from "@/core/providers";
+import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import invariant from "tiny-invariant";
 
 interface FolderProps {
   folder: {
@@ -29,8 +31,32 @@ export const Folder: React.FC<FolderProps> = ({
   handleInputBlur,
   handleKeyDown,
 }) => {
+  const ref = useRef(null);
+  const [isDraggedOver, setIsDraggedOver] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    invariant(el);
+
+    return dropTargetForElements({
+      element: el,
+      getData: () => ({ folder }),
+      onDragEnter: () => setIsDraggedOver(true),
+      onDragLeave: () => setIsDraggedOver(false),
+      onDrop: () => setIsDraggedOver(false),
+    });
+  }, []);
   return (
-    <div key={folder.id} className="mb-4">
+    <div
+      key={folder.id}
+      className="mb-4"
+      ref={ref}
+      style={
+        isDraggedOver
+          ? { backgroundColor: "lightblue" }
+          : { backgroundColor: "transparent" }
+      }
+    >
       {activeWorkspaceId !== folder.id && (
         <h3 className="text-lg font-semibold">{folder.name}</h3>
       )}
@@ -40,6 +66,7 @@ export const Folder: React.FC<FolderProps> = ({
           note={note}
           editingNoteId={editingNoteId}
           newNoteName={newNoteName}
+          folder={folder}
           onClick={() => setActiveNoteId(note.id)}
           onContextMenu={(e) => handleContextMenu(e, note)}
           onInputChange={handleInputChange}

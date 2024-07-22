@@ -10,6 +10,7 @@ const useAside = () => {
     setNoteName,
     activeNotes,
     setActiveNoteDisplay,
+    moveNote,
   } = useWorkspaceContext();
 
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
@@ -126,6 +127,7 @@ const useAside = () => {
     getContextMenuOptions,
     contextMenuRef,
     activeWorkspaceId,
+    moveNote,
   };
 };
 
