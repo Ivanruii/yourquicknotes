@@ -1,1 +1,2 @@
-export * from "./note-item.component";
+export * from './folder.component';
+export * from './note.component';
