@@ -6,6 +6,7 @@ import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 interface NoteItemProps {
   note: NoteModel;
   editingNoteId: string | null;
+  activeWorkSpaceId: string | null;
   newNoteName: string;
   folder: FolderModel;
   onClick: () => void;
@@ -18,6 +19,7 @@ interface NoteItemProps {
 export const NoteItem: React.FC<NoteItemProps> = ({
   note,
   editingNoteId,
+  activeWorkSpaceId,
   newNoteName,
   folder,
   onClick,
@@ -40,7 +42,17 @@ export const NoteItem: React.FC<NoteItemProps> = ({
       onDragStart: () => setDragging(true),
       onDrop: () => setDragging(false),
     });
-  }, []);
+  }, [note, folder]);
+
+  const inputClassName =
+    folder.id !== activeWorkSpaceId
+      ? "block  ml-12 bg-transparent"
+      : "block  bg-transparent";
+
+  const spanClassName =
+    folder.id !== activeWorkSpaceId
+      ? "ml-12 cursor-pointer"
+      : "ml-1 cursor-pointer";
 
   return editingNoteId === note.id ? (
     <input
@@ -49,14 +61,14 @@ export const NoteItem: React.FC<NoteItemProps> = ({
       onChange={onInputChange}
       onBlur={onInputBlur}
       onKeyDown={onKeyDown}
-      className="block w-full p-2 mb-2 text-left text-white bg-blue-500 border-none rounded"
+      className={inputClassName}
       autoFocus
     />
   ) : (
     <span
       onClick={onClick}
       onContextMenu={onContextMenu}
-      className="cursor-pointer"
+      className={spanClassName}
       ref={ref}
       style={{ opacity: dragging ? 0.4 : 1 }}
     >

@@ -3,7 +3,12 @@ import { NoteItem } from "./note.component";
 import { NoteModel } from "@/core/providers";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import invariant from "tiny-invariant";
-import { ChevronDown, ChevronRight } from "@/common/components";
+import {
+  ChevronDown,
+  ChevronRight,
+  FolderClose,
+  FolderOpen,
+} from "@/common/components";
 
 interface FolderProps {
   folder: {
@@ -51,7 +56,7 @@ export const Folder: React.FC<FolderProps> = ({
   return (
     <div
       key={folder.id}
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-1"
       ref={ref}
       style={
         isDraggedOver
@@ -60,18 +65,26 @@ export const Folder: React.FC<FolderProps> = ({
       }
     >
       {activeWorkspaceId !== folder.id && (
-        <div className="flex gap-3">
-          {isFolderCollapsed ? <ChevronRight /> : <ChevronDown />}
-          <h3
-            onClick={() =>
-              isFolderCollapsed
-                ? setFolderCollapsed(false)
-                : setFolderCollapsed(true)
-            }
-            className="font-semibold cursor-pointer select-none"
-          >
-            {folder.name}
-          </h3>
+        <div
+          onClick={() =>
+            isFolderCollapsed
+              ? setFolderCollapsed(false)
+              : setFolderCollapsed(true)
+          }
+          className="flex gap-2 cursor-pointer"
+        >
+          {isFolderCollapsed ? (
+            <>
+              <ChevronRight width={15} />
+              <FolderClose width={15} />
+            </>
+          ) : (
+            <>
+              <ChevronDown width={15} />
+              <FolderOpen width={15} />
+            </>
+          )}
+          <h3 className="font-semibold select-none">{folder.name}</h3>
         </div>
       )}
       {folder.notes.map(
@@ -81,6 +94,7 @@ export const Folder: React.FC<FolderProps> = ({
               key={note.id}
               note={note}
               editingNoteId={editingNoteId}
+              activeWorkSpaceId={activeWorkspaceId}
               newNoteName={newNoteName}
               folder={folder}
               onClick={() => setActiveNoteId(note.id)}
