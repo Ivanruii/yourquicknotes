@@ -19,15 +19,15 @@ export const MainLayout = (props: MainLayoutProps) => {
         maxSize={50}
         minSize={15}
         defaultSize={15}
-        className="text-white bg-[#181c21]"
+        className="text-white bg-[#21252B]"
       >
-        <div className="p-4 bg-[#22232c]">{actions}</div>
+        <div className="mt-14 bg-[#282C34]">{actions}</div>
         <div className="p-4">{aside}</div>
       </ResizablePanel>
-      <ResizableHandle withHandle />
+      <ResizableHandle className="bg-[#282C34]" />
       <ResizablePanel className="flex flex-col flex-1">
-        <div className="p-4 text-white bg-[#22232c]">{tabs}</div>
-        <div className="flex-1 p-4 bg-[#22232c]">{content}</div>
+        <div className="p-4 text-white bg-[#21252B]">{tabs}</div>
+        <div className="flex-1 p-4 bg-[#282C34]">{content}</div>
       </ResizablePanel>
     </ResizablePanelGroup>
   );
