@@ -36,7 +36,6 @@ export const Aside: React.FC = () => {
         const destination = location.current.dropTargets[0];
 
         if (!destination) {
-          // if dropped outside of any drop targets
           return;
         }
 
@@ -45,15 +44,12 @@ export const Aside: React.FC = () => {
         const noteFolder = source.data.folder as FolderModel;
 
         if (!destinationLocation || !noteFolder || !note) {
-          // if dropped outside of any drop targets
           return;
         }
 
         moveNote(note.id, noteFolder.id, destinationLocation.id);
       },
     });
-    // Adding 'pieces' as dependencies ensures the effect is re-run
-    // whenever the location or pieces change, keeping the drop target logic updated.
   }, [folders]);
 
   useEffect(() => {
