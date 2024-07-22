@@ -22,7 +22,7 @@ export const Aside: React.FC = () => {
   } = useAside();
 
   return (
-    <aside className="relative flex flex-col p-4">
+    <aside className="p-4">
       {folders.map((folder) => (
         <Folder
           key={folder.id}
