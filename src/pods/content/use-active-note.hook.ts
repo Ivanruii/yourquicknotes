@@ -52,11 +52,9 @@ export const useActiveNote = () => {
   }, [activeWorkspaceId, activeNotes, workspaces]);
 
   const handleEditorChange = (newContent: string) => {
-    console.log("handleEditorChange");
     const activeNoteObj = findActiveNote();
     if (activeNoteObj) {
       const { folderId, note } = activeNoteObj;
-      console.log("activeNoteObj found");
 
       setNoteContent(activeWorkspaceId!, folderId, note.id, newContent);
     }
