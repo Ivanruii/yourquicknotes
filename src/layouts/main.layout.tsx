@@ -27,7 +27,7 @@ export const MainLayout = (props: MainLayoutProps) => {
       <ResizableHandle className="bg-[#282C34]" />
       <ResizablePanel className="flex flex-col flex-1">
         <div className="p-4 text-white bg-[#21252B]">{tabs}</div>
-        <div className="flex-1 p-4 bg-[#282C34]">{content}</div>
+        <div className="flex-1 bg-[#282C34]">{content}</div>
       </ResizablePanel>
     </ResizablePanelGroup>
   );

@@ -20,15 +20,15 @@ export const Actions = () => {
   };
 
   return (
-    <div className="flex justify-between px-2 py-2">
-      <h3 className="text-xl ">{activeWorkspace?.name}</h3>
+    <div className="flex justify-between px-2 py-[0.39rem] border-b border-white">
+      <h3 className="text-lg ">{activeWorkspace?.name}</h3>
 
       <div className="flex justify-between gap-4">
         <button onClick={handleAddNote}>
-          <File width={20} />
+          <File width={17} />
         </button>
         <button onClick={handleAddFolder}>
-          <FolderPlus width={22} />
+          <FolderPlus width={17} />
         </button>
       </div>
     </div>

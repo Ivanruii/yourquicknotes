@@ -19,7 +19,6 @@ import {
   imagePlugin,
   InsertImage,
 } from "@mdxeditor/editor";
-import "@mdxeditor/editor/style.css";
 import { ForwardedRef, forwardRef } from "react";
 import { ImageDialog } from "./";
 
@@ -33,7 +32,6 @@ export const NoteEditor = forwardRef<MDXEditorMethods, NoteEditorProps>(
     <>
       <MDXEditor
         ref={ref}
-        className="dark"
         markdown={markdown}
         onChange={onChange}
         plugins={[
@@ -70,7 +68,14 @@ export const NoteEditor = forwardRef<MDXEditorMethods, NoteEditorProps>(
             toolbarContents: () => (
               <>
                 <UndoRedo />
+                <div className="flex justify-center">
+                  <div className=" items-center w-[1px] h-6 rounded-full self-stretch bg-neutral-100 dark:bg-white/10"></div>
+                </div>
+
                 <BoldItalicUnderlineToggles />
+                <div className="flex justify-center">
+                  <div className=" items-center w-[1px] h-6 rounded-full self-stretch bg-neutral-100 dark:bg-white/10"></div>
+                </div>
                 <InsertTable />
                 <InsertCodeBlock />
                 <InsertImage />

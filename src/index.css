@@ -1,87 +1,10 @@
+@import url("./editor-styles.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.cm-scroller {
-  background: var(--baseBg);
-  color: var(--baseText);
-}
-
-.cm-lineNumbers {
-  color: #b3b3b3;
-}
-
-.cm-activeLineGutter {
-  background: var(--baseBg);
-  color: var(--baseText);
-}
-
-.codeMirrorToolbar {
-  background: var(--baseBg);
-}
-
-.mdxeditor-rich-text-editor {
-  color: var(--baseText);
-}
-
-.cm-gutterElement.cm-activeLineGutter {
-  background-color: var(--baseBg);
-}
-
-.cm-tooltip {
-  color: var(--baseBg);
-}
-
 /* TODO: Set variables as tailwind variables */
-
-.dark-editor {
-  --accentBase: #22232c;
-  --accentBgSubtle: #fff1ea;
-  --accentBg: #ffe0d4;
-  --accentBgHover: #ffceb8;
-  --accentBgActive: #ffbca1;
-  --accentLine: #ffa68a;
-  --accentBorder: #ff8f73;
-  --accentBorderHover: #ff755d;
-  --accentSolid: #ff5e46;
-  --accentSolidHover: #ff482f;
-  --accentText: #ff2f19;
-  --accentTextContrast: #ff1a05;
-  --baseBase: #22232c;
-  --baseBgSubtle: #22232c;
-  --baseBg: #22232c;
-  --baseBgHover: #e0e0e0;
-  --baseBgActive: #d6d6d6;
-  --baseLine: #2e2e2e;
-  --baseBorder: #b3b3b3;
-  --baseBorderHover: #999999;
-  --baseSolid: red;
-  --baseSolidHover: red;
-  --baseText: #fff;
-  --baseTextContrast: #fff;
-
-  --admonitionTipBg: #a0e3e3;
-  --admonitionTipBorder: #339999;
-
-  --admonitionInfoBg: #a8e6a3;
-  --admonitionInfoBorder: #6ca35f;
-
-  --admonitionCautionBg: #ffe08a;
-  --admonitionCautionBorder: #b35d00;
-
-  --admonitionDangerBg: #ffa4a4;
-  --admonitionDangerBorder: #b30000;
-
-  --admonitionNoteBg: red;
-  --admonitionNoteBorder: red;
-
-  --basePageBg: #22232c;
-
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
-}
 
 @layer base {
   :root {
