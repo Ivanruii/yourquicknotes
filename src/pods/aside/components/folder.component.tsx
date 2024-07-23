@@ -76,12 +76,12 @@ export const Folder: React.FC<FolderProps> = ({
           {isFolderCollapsed ? (
             <>
               <ChevronRight width={15} />
-              <FolderClose width={15} />
+              <FolderOpen width={15} />
             </>
           ) : (
             <>
               <ChevronDown width={15} />
-              <FolderOpen width={15} />
+              <FolderClose width={15} />
             </>
           )}
           <h3 className="font-semibold select-none">{folder.name}</h3>
