@@ -21,7 +21,7 @@ export const Actions = () => {
 
   return (
     <div className="flex justify-between px-2 py-[0.39rem] border-b border-white">
-      <h3 className="text-lg ">{activeWorkspace?.name}</h3>
+      <h3 className="text-lg truncate">{activeWorkspace?.name}</h3>
 
       <div className="flex justify-between gap-4">
         <button onClick={handleAddNote}>
