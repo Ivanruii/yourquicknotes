@@ -1,11 +1,8 @@
 import { useWorkspaceContext } from "@/core/providers";
-import { useRef } from "react";
 
 export const Tabs = () => {
   const { activeNotes, setActiveNoteDisplay, removeActiveNote } =
     useWorkspaceContext();
-
-  const closeButton = useRef<HTMLButtonElement>(null);
 
   return (
     <div>
@@ -25,7 +22,6 @@ export const Tabs = () => {
               {activeNote.note.name || "Untitled Note"}
             </button>
             <button
-              ref={closeButton}
               onClick={() => {
                 removeActiveNote(activeNote.note.id);
               }}
