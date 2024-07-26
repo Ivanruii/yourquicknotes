@@ -230,6 +230,12 @@ export const WorkspaceProvider = (props: Props) => {
     });
   };
 
+  const removeActiveNote = (noteId: string) => {
+    setActiveNotes((prevActiveNotes) =>
+      prevActiveNotes.filter((activeNote) => activeNote.note.id !== noteId)
+    );
+  };
+
   const moveNote = (
     noteId: string,
     startFolderId: string,
@@ -323,6 +329,7 @@ export const WorkspaceProvider = (props: Props) => {
         setNoteContent,
         activeNotes,
         setActiveNoteDisplay,
+        removeActiveNote,
         moveNote,
       }}
     >

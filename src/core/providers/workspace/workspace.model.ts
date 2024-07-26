@@ -65,4 +65,5 @@ export interface WorkspaceContextModel {
   ) => void;
   activeNotes: { note: NoteModel; display: boolean }[];
   setActiveNoteDisplay: (noteId: string, display: boolean) => void;
+  removeActiveNote: (noteId: string) => void;
 }
