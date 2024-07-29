@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { NoteItem } from "./note.component";
-import { NoteModel } from "@/core/providers";
-import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import invariant from "tiny-invariant";
+import React, { useEffect, useRef, useState } from 'react';
+import { NoteItem } from './note.component';
+import { NoteModel } from '@/core/providers';
+import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import invariant from 'tiny-invariant';
 import {
   ChevronDown,
   ChevronRight,
   FolderClose,
   FolderOpen,
-} from "@/common/components";
+} from '@/common/components';
 
 interface FolderProps {
   folder: {
@@ -19,7 +19,7 @@ interface FolderProps {
   activeWorkspaceId: string | null;
   editingNoteId: string | null;
   newNoteName: string;
-  setActiveNoteId: (noteId: string) => void;
+  setActiveNoteId: (note: NoteModel) => void;
   handleContextMenu: (e: React.MouseEvent, note: NoteModel) => void;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleInputBlur: () => void;
@@ -60,8 +60,8 @@ export const Folder: React.FC<FolderProps> = ({
       ref={ref}
       style={
         isDraggedOver
-          ? { backgroundColor: "lightblue" }
-          : { backgroundColor: "transparent" }
+          ? { backgroundColor: 'lightblue' }
+          : { backgroundColor: 'transparent' }
       }
     >
       {activeWorkspaceId !== folder.id && (
@@ -88,7 +88,7 @@ export const Folder: React.FC<FolderProps> = ({
         </div>
       )}
       {folder.notes.map(
-        (note) =>
+        note =>
           !isFolderCollapsed && (
             <NoteItem
               key={note.id}
@@ -97,8 +97,8 @@ export const Folder: React.FC<FolderProps> = ({
               activeWorkSpaceId={activeWorkspaceId}
               newNoteName={newNoteName}
               folder={folder}
-              onClick={() => setActiveNoteId(note.id)}
-              onContextMenu={(e) => handleContextMenu(e, note)}
+              onClick={() => setActiveNoteId(note)}
+              onContextMenu={e => handleContextMenu(e, note)}
               onInputChange={handleInputChange}
               onInputBlur={handleInputBlur}
               onKeyDown={handleKeyDown}

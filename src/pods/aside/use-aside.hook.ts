@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import { useWorkspaceContext } from "@/core/providers";
-import { NoteModel } from "@/core/providers";
+import { useState, useEffect, useRef } from 'react';
+import { useWorkspaceContext } from '@/core/providers';
+import { NoteModel } from '@/core/providers';
 
 const useAside = () => {
   const {
@@ -14,7 +14,7 @@ const useAside = () => {
   } = useWorkspaceContext();
 
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
-  const [newNoteName, setNewNoteName] = useState<string>("");
+  const [newNoteName, setNewNoteName] = useState<string>('');
   const [showContextMenu, setShowContextMenu] = useState<boolean>(false);
   const [contextMenuPosition, setContextMenuPosition] = useState<{
     x: number;
@@ -23,20 +23,20 @@ const useAside = () => {
   const contextMenuRef = useRef<HTMLDivElement>(null);
 
   const activeWorkspace = workspaces.find(
-    (workspace) => workspace.id === activeWorkspaceId
+    workspace => workspace.id === activeWorkspaceId
   );
   const folders = activeWorkspace ? activeWorkspace.folders : [];
 
-  const displayedNote = activeNotes.find((note) => note.display === true)?.note;
+  const displayedNote = activeNotes.find(note => note.display === true)?.note;
 
-  const setActiveNoteId = (noteId: string) => {
+  const setActiveNoteId = (note: NoteModel) => {
     console.log(activeNotes);
-    setActiveNoteDisplay(noteId, true);
+    setActiveNoteDisplay(note, true);
   };
 
   const handleContextMenu = (e: React.MouseEvent, note: NoteModel) => {
     e.preventDefault();
-    setActiveNoteDisplay(note.id, true);
+    setActiveNoteDisplay(note, true);
     setContextMenuPosition({ x: e.clientX, y: e.clientY });
     setShowContextMenu(true);
   };
@@ -47,8 +47,8 @@ const useAside = () => {
 
   const handleInputBlur = () => {
     if (displayedNote && activeWorkspaceId && activeWorkspace) {
-      const folder = activeWorkspace.folders.find((folder) =>
-        folder.notes.some((note) => note.id === displayedNote.id)
+      const folder = activeWorkspace.folders.find(folder =>
+        folder.notes.some(note => note.id === displayedNote.id)
       );
       if (folder) {
         setNoteName(
@@ -60,33 +60,33 @@ const useAside = () => {
       }
     }
     setEditingNoteId(null);
-    setNewNoteName("");
+    setNewNoteName('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleInputBlur();
     }
   };
 
   const getContextMenuOptions = (noteId: string) => [
     {
-      label: "Edit",
+      label: 'Edit',
       action: () => {
         setEditingNoteId(noteId);
         const note = activeNotes.find(
-          (activeNote) => activeNote.note.id === noteId
+          activeNote => activeNote.note.id === noteId
         )?.note;
-        setNewNoteName(note ? note.name : "");
+        setNewNoteName(note ? note.name : '');
         setShowContextMenu(false);
       },
     },
     {
-      label: "Delete",
+      label: 'Delete',
       action: () => {
         if (activeWorkspaceId && activeWorkspace) {
-          const folder = activeWorkspace.folders.find((folder) =>
-            folder.notes.some((note) => note.id === noteId)
+          const folder = activeWorkspace.folders.find(folder =>
+            folder.notes.some(note => note.id === noteId)
           );
           if (folder) {
             deleteNote(activeWorkspaceId, folder.id, noteId);
@@ -107,9 +107,9 @@ const useAside = () => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [contextMenuRef]);
 

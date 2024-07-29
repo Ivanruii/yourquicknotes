@@ -6,8 +6,8 @@ export interface NoteModel {
 
 export const createInitialNote = (): NoteModel => ({
   id: crypto.randomUUID(),
-  name: "Nota vacia",
-  content: "Nota sin contenido.",
+  name: 'Nota vacia',
+  content: 'Nota sin contenido.',
 });
 
 export interface FolderModel {
@@ -24,7 +24,7 @@ export interface WorkspaceModel {
 
 export const createInitialWorkspace = (): WorkspaceModel => ({
   id: crypto.randomUUID(),
-  name: "Workspace inicial",
+  name: 'Workspace inicial',
   folders: [],
 });
 
@@ -64,6 +64,6 @@ export interface WorkspaceContextModel {
     finishFolderId: string
   ) => void;
   activeNotes: { note: NoteModel; display: boolean }[];
-  setActiveNoteDisplay: (noteId: string, display: boolean) => void;
+  setActiveNoteDisplay: (note: NoteModel, display: boolean) => void;
   removeActiveNote: (noteId: string) => void;
 }

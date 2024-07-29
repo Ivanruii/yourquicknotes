@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { MDXEditorMethods } from "@mdxeditor/editor";
-import { useWorkspaceContext } from "@/core/providers/";
+import { useEffect, useRef } from 'react';
+import { MDXEditorMethods } from '@mdxeditor/editor';
+import { useWorkspaceContext } from '@/core/providers/';
 
 export const useActiveNote = () => {
   const {
@@ -15,7 +15,7 @@ export const useActiveNote = () => {
   const findActiveNote = () => {
     if (activeWorkspaceId) {
       const activeWorkspace = workspaces.find(
-        (workspace) => workspace.id === activeWorkspaceId
+        workspace => workspace.id === activeWorkspaceId
       );
 
       if (activeWorkspace) {
@@ -23,7 +23,7 @@ export const useActiveNote = () => {
           for (const activeNote of activeNotes) {
             if (activeNote.display) {
               const note = folder.notes.find(
-                (note) => note.id === activeNote.note.id
+                note => note.id === activeNote.note.id
               );
               if (note) {
                 return { folderId: folder.id, note };
@@ -40,13 +40,13 @@ export const useActiveNote = () => {
     const activeNoteObj = findActiveNote();
     if (activeNoteObj) {
       const { note } = activeNoteObj;
-      setActiveNoteDisplay(note.id, true);
+      setActiveNoteDisplay(note, true);
       if (editorRef.current) {
         editorRef.current.setMarkdown(note.content);
       }
     } else {
       if (editorRef.current) {
-        editorRef.current.setMarkdown("");
+        editorRef.current.setMarkdown('');
       }
     }
   }, [activeWorkspaceId, activeNotes, workspaces]);
@@ -60,9 +60,5 @@ export const useActiveNote = () => {
     }
   };
 
-  const setActiveNoteId = (noteId: string, display: boolean) => {
-    setActiveNoteDisplay(noteId, display);
-  };
-
-  return { activeNotes, editorRef, handleEditorChange, setActiveNoteId };
+  return { activeNotes, editorRef, handleEditorChange };
 };
