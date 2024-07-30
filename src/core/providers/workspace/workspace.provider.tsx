@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from 'react';
 import {
   createInitialNote,
   createInitialWorkspace,
   createInitialFolder,
   WorkspaceModel,
   NoteModel,
-} from "./workspace.model";
-import { WorkspaceContext } from "./workspace.context";
+} from './workspace.model';
+import { WorkspaceContext } from './workspace.context';
 
 interface Props {
   children: React.ReactNode;
@@ -28,13 +28,13 @@ export const WorkspaceProvider = (props: Props) => {
 
   const addWorkspace = () => {
     const newWorkspace = createInitialWorkspace();
-    setWorkspaces((prevWorkspaces) => [...prevWorkspaces, newWorkspace]);
+    setWorkspaces(prevWorkspaces => [...prevWorkspaces, newWorkspace]);
     setActiveWorkspaceId(newWorkspace.id);
   };
 
   const deleteWorkspace = (id: string) => {
-    setWorkspaces((prevWorkspaces) =>
-      prevWorkspaces.filter((workspace) => workspace.id !== id)
+    setWorkspaces(prevWorkspaces =>
+      prevWorkspaces.filter(workspace => workspace.id !== id)
     );
     if (activeWorkspaceId === id && workspaces.length > 0) {
       setActiveWorkspaceId(workspaces[0].id);
@@ -44,8 +44,8 @@ export const WorkspaceProvider = (props: Props) => {
   };
 
   const addFolder = (workspaceId: string, folderName: string) => {
-    setWorkspaces((prevWorkspaces) =>
-      prevWorkspaces.map((workspace) =>
+    setWorkspaces(prevWorkspaces =>
+      prevWorkspaces.map(workspace =>
         workspace.id === workspaceId
           ? {
               ...workspace,
@@ -60,13 +60,13 @@ export const WorkspaceProvider = (props: Props) => {
   };
 
   const deleteFolder = (workspaceId: string, folderId: string) => {
-    setWorkspaces((prevWorkspaces) =>
-      prevWorkspaces.map((workspace) =>
+    setWorkspaces(prevWorkspaces =>
+      prevWorkspaces.map(workspace =>
         workspace.id === workspaceId
           ? {
               ...workspace,
               folders: workspace.folders.filter(
-                (folder) => folder.id !== folderId
+                folder => folder.id !== folderId
               ),
             }
           : workspace
@@ -77,19 +77,19 @@ export const WorkspaceProvider = (props: Props) => {
   const addNote = (workspaceId: string, folderId: string | null) => {
     const newNote = createInitialNote();
 
-    setWorkspaces((prevWorkspaces) => {
-      return prevWorkspaces.map((workspace) => {
+    setWorkspaces(prevWorkspaces => {
+      return prevWorkspaces.map(workspace => {
         if (workspace.id === workspaceId) {
           if (folderId === null) {
             let rootFolder = workspace.folders.find(
-              (folder) => folder.id === workspace.id
+              folder => folder.id === workspace.id
             );
 
             if (!rootFolder) {
               rootFolder = createInitialFolder(workspace);
               return {
                 ...workspace,
-                folders: [...workspace.folders, rootFolder].map((folder) =>
+                folders: [...workspace.folders, rootFolder].map(folder =>
                   folder.id === rootFolder!.id
                     ? { ...folder, notes: [...folder.notes, newNote] }
                     : folder
@@ -99,7 +99,7 @@ export const WorkspaceProvider = (props: Props) => {
 
             return {
               ...workspace,
-              folders: workspace.folders.map((folder) =>
+              folders: workspace.folders.map(folder =>
                 folder.id === rootFolder!.id
                   ? { ...folder, notes: [...folder.notes, newNote] }
                   : folder
@@ -109,7 +109,7 @@ export const WorkspaceProvider = (props: Props) => {
 
           return {
             ...workspace,
-            folders: workspace.folders.map((folder) =>
+            folders: workspace.folders.map(folder =>
               folder.id === folderId
                 ? { ...folder, notes: [...folder.notes, newNote] }
                 : folder
@@ -128,16 +128,16 @@ export const WorkspaceProvider = (props: Props) => {
     folderId: string | null,
     noteId: string
   ) => {
-    setWorkspaces((prevWorkspaces) =>
-      prevWorkspaces.map((workspace) =>
+    setWorkspaces(prevWorkspaces =>
+      prevWorkspaces.map(workspace =>
         workspace.id === workspaceId
           ? {
               ...workspace,
-              folders: workspace.folders.map((folder) =>
+              folders: workspace.folders.map(folder =>
                 folder.id === folderId || folderId === null
                   ? {
                       ...folder,
-                      notes: folder.notes.filter((note) => note.id !== noteId),
+                      notes: folder.notes.filter(note => note.id !== noteId),
                     }
                   : folder
               ),
@@ -153,16 +153,16 @@ export const WorkspaceProvider = (props: Props) => {
     noteId: string,
     name: string
   ) => {
-    setWorkspaces((prevWorkspaces) =>
-      prevWorkspaces.map((workspace) =>
+    setWorkspaces(prevWorkspaces =>
+      prevWorkspaces.map(workspace =>
         workspace.id === workspaceId
           ? {
               ...workspace,
-              folders: workspace.folders.map((folder) =>
+              folders: workspace.folders.map(folder =>
                 folder.id === folderId || folderId === null
                   ? {
                       ...folder,
-                      notes: folder.notes.map((note) =>
+                      notes: folder.notes.map(note =>
                         note.id === noteId ? { ...note, name } : note
                       ),
                     }
@@ -170,6 +170,13 @@ export const WorkspaceProvider = (props: Props) => {
               ),
             }
           : workspace
+      )
+    );
+    setActiveNotes(prevActiveNotes =>
+      prevActiveNotes.map(activeNote =>
+        activeNote.note.id === noteId
+          ? { ...activeNote, note: { ...activeNote.note, name } }
+          : activeNote
       )
     );
   };
@@ -180,16 +187,16 @@ export const WorkspaceProvider = (props: Props) => {
     noteId: string,
     content: string
   ) => {
-    setWorkspaces((prevWorkspaces) =>
-      prevWorkspaces.map((workspace) =>
+    setWorkspaces(prevWorkspaces =>
+      prevWorkspaces.map(workspace =>
         workspace.id === workspaceId
           ? {
               ...workspace,
-              folders: workspace.folders.map((folder) =>
+              folders: workspace.folders.map(folder =>
                 folder.id === folderId || folderId === null
                   ? {
                       ...folder,
-                      notes: folder.notes.map((note) =>
+                      notes: folder.notes.map(note =>
                         note.id === noteId ? { ...note, content } : note
                       ),
                     }
@@ -201,16 +208,16 @@ export const WorkspaceProvider = (props: Props) => {
     );
   };
 
-  const setActiveNoteDisplay = (noteId: string, display: boolean) => {
-    setActiveNotes((prevActiveNotes) => {
-      const updatedNotes = prevActiveNotes.map((activeNote) => ({
+  const setActiveNoteDisplay = (note: NoteModel, display: boolean) => {
+    setActiveNotes(prevActiveNotes => {
+      const updatedNotes = prevActiveNotes.map(activeNote => ({
         ...activeNote,
         display: false,
       }));
 
       if (display) {
         const existingNoteIndex = prevActiveNotes.findIndex(
-          (activeNote) => activeNote.note.id === noteId
+          activeNote => activeNote.note.id === note.id
         );
 
         if (existingNoteIndex >= 0) {
@@ -220,7 +227,7 @@ export const WorkspaceProvider = (props: Props) => {
           };
         } else {
           updatedNotes.push({
-            note: { id: noteId, name: "", content: "" },
+            note: { id: note.id, name: note.name, content: note.name },
             display: true,
           });
         }
@@ -231,8 +238,8 @@ export const WorkspaceProvider = (props: Props) => {
   };
 
   const removeActiveNote = (noteId: string) => {
-    setActiveNotes((prevActiveNotes) =>
-      prevActiveNotes.filter((activeNote) => activeNote.note.id !== noteId)
+    setActiveNotes(prevActiveNotes =>
+      prevActiveNotes.filter(activeNote => activeNote.note.id !== noteId)
     );
   };
 
@@ -244,13 +251,13 @@ export const WorkspaceProvider = (props: Props) => {
     if (startFolderId === finishFolderId) {
       return;
     }
-    setWorkspaces((prevWorkspaces) => {
-      const updatedWorkspaces = prevWorkspaces.map((workspace) => {
+    setWorkspaces(prevWorkspaces => {
+      const updatedWorkspaces = prevWorkspaces.map(workspace => {
         const sourceFolderIndex = workspace.folders.findIndex(
-          (folder) => folder.id === startFolderId
+          folder => folder.id === startFolderId
         );
         const destinationFolderIndex = workspace.folders.findIndex(
-          (folder) => folder.id === finishFolderId
+          folder => folder.id === finishFolderId
         );
 
         if (sourceFolderIndex === -1 || destinationFolderIndex === -1) {
@@ -260,12 +267,12 @@ export const WorkspaceProvider = (props: Props) => {
         const sourceFolder = workspace.folders[sourceFolderIndex];
         const destinationFolder = workspace.folders[destinationFolderIndex];
 
-        const note = sourceFolder.notes.find((note) => note.id === noteId);
+        const note = sourceFolder.notes.find(note => note.id === noteId);
         if (!note) return workspace;
 
         const updatedSourceFolder = {
           ...sourceFolder,
-          notes: sourceFolder.notes.filter((note) => note.id !== noteId),
+          notes: sourceFolder.notes.filter(note => note.id !== noteId),
         };
 
         const updatedDestinationFolder = {
@@ -279,8 +286,8 @@ export const WorkspaceProvider = (props: Props) => {
             index === sourceFolderIndex
               ? updatedSourceFolder
               : index === destinationFolderIndex
-              ? updatedDestinationFolder
-              : folder
+                ? updatedDestinationFolder
+                : folder
           ),
         };
       });
@@ -290,16 +297,16 @@ export const WorkspaceProvider = (props: Props) => {
   };
 
   const saveWorkspaces = () => {
-    localStorage.setItem("workspaces", JSON.stringify(workspaces));
-    localStorage.setItem("activeNotes", JSON.stringify(activeNotes));
+    localStorage.setItem('workspaces', JSON.stringify(workspaces));
+    localStorage.setItem('activeNotes', JSON.stringify(activeNotes));
   };
 
   const loadWorkspaces = () => {
-    const storedWorkspaces = localStorage.getItem("workspaces");
+    const storedWorkspaces = localStorage.getItem('workspaces');
     if (storedWorkspaces) {
       setWorkspaces(JSON.parse(storedWorkspaces));
     }
-    const storedActiveNotes = localStorage.getItem("activeNotes");
+    const storedActiveNotes = localStorage.getItem('activeNotes');
     if (storedActiveNotes) {
       setActiveNotes(JSON.parse(storedActiveNotes));
     }
@@ -342,7 +349,7 @@ export const useWorkspaceContext = () => {
   const context = useContext(WorkspaceContext);
   if (context === null) {
     throw new Error(
-      "useWorkspaceContext: looks like you have forgotten to add the provider on top of the app :)"
+      'useWorkspaceContext: looks like you have forgotten to add the provider on top of the app :)'
     );
   }
   return context;
